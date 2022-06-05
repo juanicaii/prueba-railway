@@ -1,10 +1,17 @@
 package com.tecnico.accenture.services;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.google.gson.Gson;
+import com.tecnico.accenture.models.Album;
+import com.tecnico.accenture.models.Photo;
 
 @Service
 public class ExternalService {
@@ -12,6 +19,8 @@ public class ExternalService {
 	private String baseUrl;
 	@Autowired
 	private RestTemplate restTemplate;
+	@Autowired
+	private Gson gson;
 	
 	/*
 		Realiza el pedido de usuarios a la API externa.
@@ -28,9 +37,29 @@ public class ExternalService {
 	
 	/*
 	 	Realiza el pedido de albums de un determinado usuario a la API externa.
+	 	
+	 	NOTA: en este caso si aplicamos el adapter a un modelo de nuestro dominio 
+	 	ya que luego vamos a utilizar la información de los albums obtenidos para 
+	 	traer las fotos del usuario.
 	*/
-	public String getUserAlbums(String userId) {
+	public List<Album> getUserAlbums(String userId) {
 		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "users/" + userId + "/albums", String.class);
-		return jsonResponse.getBody();
+		
+		//Convertimos el Json recibido en un array de nuestro modelo
+		Album[] userAlbums = gson.fromJson(jsonResponse.getBody(), Album[].class);
+		
+		return Arrays.asList(userAlbums);
+	}
+	
+	/*
+	 	Realiza el pedido de fotos de un determinado album a la API externa.
+	*/
+	public List<Photo> getAlbumPhotos(String albumId) {
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "albums/" + albumId + "/photos", String.class);
+		
+		//Convertimos el Json recibido en un array de nuestro modelo
+		Photo[] albumPhotos = gson.fromJson(jsonResponse.getBody(), Photo[].class);
+		
+		return Arrays.asList(albumPhotos);
 	}
 }

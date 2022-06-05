@@ -62,4 +62,12 @@ public class ExternalService {
 		
 		return Arrays.asList(albumPhotos);
 	}
+	
+	/*
+	 	Realiza el pedido de comentarios generales a la API externa
+	*/
+	public String getComments() {
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "comments", String.class);
+		return jsonResponse.getBody();
+	}
 }

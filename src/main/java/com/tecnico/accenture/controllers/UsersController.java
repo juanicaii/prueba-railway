@@ -14,8 +14,8 @@ public class UsersController {
 	private ExternalService service;
 	
 	@GetMapping("/usuarios")
-	public void getUsers() {
-		
+	public String getUsers() {
+		return service.getUsers();
 	}
 	
 	@GetMapping("/fotos/{userId}")

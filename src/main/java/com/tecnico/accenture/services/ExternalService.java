@@ -13,8 +13,18 @@ public class ExternalService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public void getUsers() {
+	/*
+	 	NOTA: No se considera el uso de models ya que lo único que hace la API 
+	 	es mostrar la información. En caso de tener que utilizar la información 
+	 	lo correcto sería el uso de un Adapter para poder obtener un objeto 
+	 	modelo que sea parte de nuestro dominio que nos sirva para manipularlo.
+	*/
+	
+	/*
+		Realiza el pedido de usuarios a la API externa
+	*/
+	public String getUsers() {
 		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "users", String.class);
-		System.out.println(jsonResponse);
+		return jsonResponse.getBody();
 	}
 }

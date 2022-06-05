@@ -14,17 +14,23 @@ public class ExternalService {
 	private RestTemplate restTemplate;
 	
 	/*
-	 	NOTA: No se considera el uso de models ya que lo único que hace la API 
+		Realiza el pedido de usuarios a la API externa.
+		
+		NOTA: No se considera el uso de models ya que lo único que hace la API 
 	 	es mostrar la información. En caso de tener que utilizar la información 
 	 	lo correcto sería el uso de un Adapter para poder obtener un objeto 
 	 	modelo que sea parte de nuestro dominio que nos sirva para manipularlo.
 	*/
-	
-	/*
-		Realiza el pedido de usuarios a la API externa
-	*/
 	public String getUsers() {
 		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "users", String.class);
+		return jsonResponse.getBody();
+	}
+	
+	/*
+	 	Realiza el pedido de albums de un determinado usuario a la API externa.
+	*/
+	public String getUserAlbums(String userId) {
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "users/" + userId + "/albums", String.class);
 		return jsonResponse.getBody();
 	}
 }

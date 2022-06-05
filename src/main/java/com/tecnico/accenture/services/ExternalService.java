@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 import com.tecnico.accenture.models.Album;
 import com.tecnico.accenture.models.Photo;
+import com.tecnico.accenture.models.Post;
 
 @Service
 public class ExternalService {
@@ -61,6 +62,18 @@ public class ExternalService {
 		Photo[] albumPhotos = gson.fromJson(jsonResponse.getBody(), Photo[].class);
 		
 		return Arrays.asList(albumPhotos);
+	}
+	
+	/*
+	 	Realiza el pedido de posts de un usuario específico a la API externa
+	*/
+	public List<Post> getUserPosts(String userId) {
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "users/" + userId + "/posts", String.class);
+		
+		//Convertimos el Json recibido en un array de nuestro modelo
+		Post[] userPosts = gson.fromJson(jsonResponse.getBody(), Post[].class);
+		
+		return Arrays.asList(userPosts);
 	}
 	
 	/*

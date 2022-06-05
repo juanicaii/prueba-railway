@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 import com.tecnico.accenture.models.Album;
+import com.tecnico.accenture.models.Comment;
 import com.tecnico.accenture.models.Photo;
 import com.tecnico.accenture.models.Post;
 
@@ -77,18 +78,19 @@ public class ExternalService {
 	}
 	
 	/*
-	 	Realiza el pedido de comentarios generales a la API externa
+	 	Realiza el pedido de comentarios a la API externa
 	*/
-	public String getComments() {
-		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "comments", String.class);
-		return jsonResponse.getBody();
-	}
-	
-	/*
-	 	Realiza el pedido de comentarios filtrados por campo "name" a la API externa
-	*/
-	public String getCommentsByName(String name) {
-		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "comments?name=" + name, String.class);
-		return jsonResponse.getBody();
+	public List<Comment> getComments(String attr, String value) {
+		//Si utiliza algun tipo de filtro, agrego el query param a la consulta
+		String path = baseUrl + "comments";
+		if(attr != null) {
+			path = path.concat("?" + attr + "=" + value);
+		}
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(path, String.class);
+		
+		//Convertimos el Json recibido en un array de nuestro modelo
+		Comment[] comments = gson.fromJson(jsonResponse.getBody(), Comment[].class);
+		
+		return Arrays.asList(comments);
 	}
 }

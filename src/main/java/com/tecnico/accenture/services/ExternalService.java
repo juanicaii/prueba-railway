@@ -70,4 +70,12 @@ public class ExternalService {
 		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "comments", String.class);
 		return jsonResponse.getBody();
 	}
+	
+	/*
+	 	Realiza el pedido de comentarios filtrados por campo "name" a la API externa
+	*/
+	public String getCommentsByName(String name) {
+		ResponseEntity<String> jsonResponse = restTemplate.getForEntity(baseUrl + "comments?name=" + name, String.class);
+		return jsonResponse.getBody();
+	}
 }
